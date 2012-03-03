@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>DivOverlay Demo</title>
+    <style>
+        .popup_text{
+	        position:relative;
+            -moz-opacity: 1;
+            opacity: 1;
+	        color: white;
+        }
+        
+        .popup  {
+	        float: left;
+	        background: black;
+	        position:relative;
+	        padding: 8px;
+	        border-radius: 8px; 
+            -moz-border-radius: 8px; 
+            -webkit-border-radius: 8px; 	
+	        white-space : nowrap;
+	        font-weight:bold;
+	        opacity: .65;
+	        color: #FFFFFF;
+        }
+        
+        #map {
+            width: 400px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+<h2>DivOverlay Demo</h2>
+<p>Hover over the marker to see the overlay. The overlay will calculate its position so it's always within the map bounds as they were when it was created.</p>
+<div id='map'></div>
+
+<script type='text/javascript' src='http://maps.google.com/maps/api/js?v=3.4&sensor=false'></script>
+<script type='text/javascript' src='divoverlay.js'></script>
+<script type='text/javascript'>
+    var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 13,
+			center: new google.maps.LatLng(40.71533862964688, -73.93952650219734), // New York's coordinates
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			zoomControlOptions : { style : google.maps.ZoomControlStyle.SMALL}
+		}
+	); 
+	var marker = new google.maps.Marker({
+        map      : map,
+        position : map.getCenter()
+    });
+    
+	var popuptextDiv = document.createElement('div');
+	var textDiv = document.createElement('span');
+	textDiv.className = 'popup_text';
+	var textNode = document.createTextNode('This is the center of the map!');
+	textDiv.appendChild(textNode)
+	popuptextDiv.className = 'popup';
+	popuptextDiv.appendChild(textDiv);
+	var divOverlay = new DivOverlay(popuptextDiv, map, map.getCenter());
+	divOverlay.hide();
+	
+	google.maps.event.addListener(marker, 'mouseover', function() {
+	    divOverlay.show();
+	});
+	google.maps.event.addListener(marker, 'mouseout', function() {
+	    divOverlay.hide();
+	});	
+</script>
+</body>
+</html>
